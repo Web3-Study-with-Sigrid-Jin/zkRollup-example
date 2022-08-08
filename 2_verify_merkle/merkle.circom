@@ -26,6 +26,8 @@ template ManyMerkleTreeChecker(levels, length, nInputs) {
 
     component selectors[levels];
     component hashers[levels];
+    component rootEquals[levels];
+    component rootMatch;
 
     component leaf_hasher = Poseidon(nInputs);
     for (var i = 0; i < nInputs; i++){
@@ -47,6 +49,18 @@ template ManyMerkleTreeChecker(levels, length, nInputs) {
     // [assignment] verify that the resultant hash (computed merkle root)
     // is in the set of roots received as input
     // Note that running test.sh should create a valid proof in current circuit, even though it doesn't do anything.
+    var equalsCount = 0;
+    for (var i = 0; i < length; i++) {
+        rootEquals[i] = IsEqual();
+        rootEquals[i].in[0] <== hashers[levels - 1].hash;
+        rootEquals[i].in[1] <== roots[i];
+        equalsCount += rootEquals[i].out;
+    }
+
+    rootMatch = GreaterThan(4);
+    rootMatch.in[0] <== equalsCount;
+    rootMatch.in[1] <== 0;
+    out <== rootMatch.out;
 }
 
 component main = ManyMerkleTreeChecker(2, 2, 3);

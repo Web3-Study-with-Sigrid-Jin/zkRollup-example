@@ -11,4 +11,4 @@ template ForceEqualIfEnabled() {
     (1 - isz.out)*enabled === 0;
 }
 
-component main = ForceEqualIfEnabled()
+component main = ForceEqualIfEnabled();
