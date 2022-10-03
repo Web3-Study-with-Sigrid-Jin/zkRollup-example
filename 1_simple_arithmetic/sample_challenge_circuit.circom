@@ -1,8 +1,10 @@
+pragma circom 2.0.0;
+
 template SimpleChecks(k) {
-    signal private input a[k];
-    signal private input b[k];
+    signal input a[k];
+    signal input b[k];
     signal input c[k];
-    signal private input d[k];
+    signal input d[k];
     signal output out;
     
     var sum = 0;
@@ -20,4 +22,4 @@ template SimpleChecks(k) {
     out <== sum;
 }
 
-component main = SimpleChecks(4);
+component main {public [c]} = SimpleChecks(4);
